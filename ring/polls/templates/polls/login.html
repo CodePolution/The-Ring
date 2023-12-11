@@ -1,0 +1,15 @@
+<p>Test</p>
+<div>
+<form class='form' method="POST" action="log">
+    {% csrf_token %}
+    {% for message in messages %}
+        <div> </div>
+    {% endfor %}
+    <input type="text" id="username" name="username" required>
+
+    <input type="password" id="passwod" name="passwod" required>
+
+    <button>Логин</button>
+
+</form>
+</div>
