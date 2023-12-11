@@ -1,24 +1,28 @@
+from django import forms
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.contrib.auth.views import  LoginView
 
 def main(request):
-    return render(request, 'polls/main.html')
+    return render(request, 'polls/authorization.html')
 
-class Login(TemplateView):
-    template_name = "polls/login.html"
 
-    def lgn(self, request):
-        if request.method == "POST":
-            llogin = request.POST.get("username")        
-            password = request.POST.get("password")    
-            user = authenticate(username=llogin, password=password)
-            
-            if user is not None:
-                login(request, user)
-                return redirect('main')
-                
-            else:
-                return redirect("login")            
+class SignInView(LoginView):
+    """
+    Вьюшка для входа пользователя в аккаунт
+    """
+
+    template_name = 'account/auth/login.html'
+    form_class = forms.AuthorizationForm
+    redirect_authenticated_user = True
+    success_url = settings.PROFILE_URL
+
+    def dispatch(self, request, args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect(self.success_url)
+
+        return super().dispatch(request,args, **kwargs)

@@ -1,0 +1,46 @@
+@import url(root.css);
+@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+
+/* font-family: 'Kablammo', sans-serif;  REGULAR */
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    overflow-y: hidden;
+}
+
+.container-fluid{
+    font-family: 'Kablammo', sans-serif;
+    background-color: var(--background-color);
+    height: 100vh;
+}
+
+.card{
+    border-radius: 20px !important;
+    background-color: var(--main-color) !important;
+    width: 450px !important;
+    height: 450px !important;
+}
+
+.card-title{
+    font-size: 1.2em;
+}
+
+.card-body{
+    border-radius: 20px;
+}
+
+.mb-3{
+    width: 375px;
+}
+
+.form-control{
+    background-color: var(--advanced-color);
+}
+
+.btn{
+    width: 100px;
+}
