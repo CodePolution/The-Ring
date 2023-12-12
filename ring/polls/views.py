@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.views import  LoginView
+from .forms import AuthorizationForm
 
 def main(request):
     return render(request, 'polls/authorization.html')
@@ -17,7 +18,7 @@ class SignInView(LoginView):
     """
 
     template_name = 'account/auth/login.html'
-    form_class = forms.AuthorizationForm
+    form_class = AuthorizationForm
     redirect_authenticated_user = True
     success_url = settings.PROFILE_URL
 
