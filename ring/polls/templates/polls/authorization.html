@@ -17,27 +17,28 @@
                                 <div class="card-title mt-4 d-flex justify-content-center align-items-center">
                                     <span>Authorisation</span>
                                 </div>
-                                {% comment %} Место для формы {% endcomment %}
-                                <div class="col-12 mt-5 d-flex justify-content-center align-items-center">
-                                    <div class="mb-3">
-                                        <label for="basic-url" class="form-label">Login</label>
-                                        <div class="input-group">
-                                          <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+                                <form method="POST" action={% url "log" %}>
+                                    {% csrf_token %}
+                                    <div class="col-12 mt-5 d-flex justify-content-center align-items-center">
+                                        <div class="mb-3">
+                                            <label for="basic-url" class="form-label">Login</label>
+                                            <div class="input-group">
+                                            <input type="text" class="form-control" id="username" aria-describedby="basic-addon3 basic-addon4" name="username">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 mt-4 d-flex justify-content-center align-items-center">
-                                    <div class="mb-3">
-                                        <label for="basic-url" class="form-label">Password</label>
-                                        <div class="input-group">
-                                          <input type="password" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+                                    <div class="col-12 mt-4 d-flex justify-content-center align-items-center">
+                                        <div class="mb-3">
+                                            <label for="basic-url" class="form-label">Password</label>
+                                            <div class="input-group">
+                                            <input type="password" class="form-control" id="password" aria-describedby="basic-addon3 basic-addon4" name="password">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 mt-5 mb-3 d-flex justify-content-center align-items-center">
-                                   <button class="btn btn-light" type="button">Enter</button>
-                                </div>
-                                {% comment %} Завершение формы {% endcomment %}
+                                    <div class="col-12 mt-5 mb-3 d-flex justify-content-center align-items-center">
+                                    <button class="btn btn-light" type="submit">Enter</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
