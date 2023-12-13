@@ -1,7 +1,7 @@
 @import url(root.css);
-@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-/* font-family: 'Kablammo', sans-serif;  REGULAR */
+/* font-family: 'Roboto', sans-serif;  REGULAR */
 
 *{
     padding: 0;
@@ -10,23 +10,25 @@
 
 body{
     overflow-y: hidden;
+    background-color: var(--background-color) !important;
 }
 
 .container-fluid{
-    font-family: 'Kablammo', sans-serif;
-    background-color: var(--background-color);
+    font-family: 'Roboto', sans-serif;
     height: 100vh;
 }
 
 .card{
     border-radius: 20px !important;
     background-color: var(--main-color) !important;
-    width: 450px !important;
-    height: 450px !important;
+    width: 200px !important;
+    height: 325px !important;
+    font-size: 0.7em;
 }
 
 .card-title{
-    font-size: 1.2em;
+    margin-top: 12px;
+    font-size: 0.9em;
 }
 
 .card-body{
@@ -39,8 +41,184 @@ body{
 
 .form-control{
     background-color: var(--advanced-color);
+    height: 25px;
+    font-size: 0.7em !important;
+}
+
+.input-1{
+    margin-top: 30px;
+}
+
+.input-2{
+    margin-top: 20px;
 }
 
 .btn{
-    width: 100px;
+    width: 70px;
+    height: 25px;
+    font-size: 0.7em !important;
+    margin-top: 25px;
 }
+
+  @media (min-width: 275px) { /* sm*/
+    .card{
+        width: 200px !important;
+        height: 325px !important;
+        font-size: 0.7em;
+    }
+    .card-title{
+        margin-top: 12px;
+        font-size: 0.9em;
+    }
+    .form-control{
+        height: 25px;
+        font-size: 0.7em !important;
+    }
+    .input-1{
+        margin-top: 30px;
+    }
+    .input-2{
+        margin-top: 20px;
+    }
+    .btn{
+        width: 70px;
+        height: 25px;
+        font-size: 0.7em !important;
+        margin-top: 25px;
+    }
+  }
+  @media (min-width: 350px) { /* sm*/
+    .card{
+        width: 200px !important;
+        height: 325px !important;
+        font-size: 0.7em;
+    }
+    .card-title{
+        margin-top: 12px;
+        font-size: 0.9em;
+    }
+    .form-control{
+        height: 25px;
+        font-size: 0.7em !important;
+    }
+    .input-1{
+        margin-top: 30px;
+    }
+    .input-2{
+        margin-top: 20px;
+    }
+    .btn{
+        width: 70px;
+        height: 25px;
+        font-size: 0.7em !important;
+        margin-top: 25px;
+    }
+  }
+  @media (min-width: 450px) { /* sm*/
+    .card{
+        width: 200px !important;
+        height: 325px !important;
+        font-size: 0.7em;
+    }
+    .card-title{
+        margin-top: 12px;
+        font-size: 0.9em;
+    }
+    .form-control{
+        height: 25px;
+        font-size: 0.7em !important;
+    }
+    .input-1{
+        margin-top: 30px;
+    }
+    .input-2{
+        margin-top: 20px;
+    }
+    .btn{
+        width: 70px;
+        height: 25px;
+        font-size: 0.7em !important;
+        margin-top: 25px;
+    }
+  }
+  @media (min-width: 768px) { /* md */
+    .card{
+        width: 250px !important;
+        height: 400px !important;
+        font-size: 0.9em;
+    }
+    .card-title{
+        margin-top: 24px;
+        font-size: 1.1em;
+    }
+    .form-control{
+        height: 30px;
+        font-size: 0.9em !important;
+    }
+    .input-1{
+        margin-top: 30px;
+    }
+    .input-2{
+        margin-top: 20px;
+    }
+    .btn{
+        width: 100px;
+        height: 30px;
+        font-size: 0.9em !important;
+        margin-top: 35px;
+    }
+  }
+  @media (min-width: 992px) { /* lg */
+    .card{
+        width: 300px !important;
+        height: 450px !important;
+        font-size: 1em;
+    }
+    .card-title{
+        margin-top: 24px;
+        font-size: 1.2em;
+    }
+    .form-control{
+        height: 40px;
+        font-size: 1em !important;
+    }
+    .input-1{
+        margin-top: 40px;
+    }
+    .input-2{
+        margin-top: 24px;
+    }
+    .btn{
+        width: 120px;
+        height: 40px;
+        font-size: 1em !important;
+        margin-top: 42px;
+    }
+  }
+  @media (min-width: 1400px) { /* xxl */
+    .card{
+        width: 350px !important;
+        height: 450px !important;
+        font-size: 1em;
+    }
+    .card-title{
+        margin-top: 24px;
+        font-size: 1.2em;
+    }
+    .form-control{
+        height: 40px;
+        font-size: 1em !important;
+    }
+    .input-1{
+        margin-top: 40px;
+    }
+    .input-2{
+        margin-top: 24px;
+    }
+    .btn{
+        width: 120px;
+        height: 40px;
+        font-size: 1em !important;
+        margin-top: 42px;
+    }
+  }
