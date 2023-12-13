@@ -1,0 +1,126 @@
+:root {
+    --color-main: #0C0D13;
+    --color1: #FFD600;
+}
+
+html, body, main {
+    background-color: var(--color-main);
+}
+
+.custom_btn {
+    background-color: var(--color-main);
+    border: 1px solid var(--color1);
+    color: white;
+    border-radius: 10px;
+    width: 100px;
+    height: 33px;
+}
+
+.send_btn {
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+    width: 166px;
+    height: 40px;
+    flex-shrink: 0;
+    margin-top: 360px;
+}
+
+/* Круги */
+.red-circle {
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+/* Стрелки */
+.bi {
+    color: white;
+    padding-left: 10px;
+}
+/* дальше мне лень стало писать комменты */
+.container_nav {
+    height: 65px !important;
+}
+
+.rightbar_arrow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -20px;
+}
+
+.left_arrow {
+    background-color: var(--color-main);
+    border: none;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    position: relative; 
+}
+
+.rotated-text {
+    transform: rotate(-90deg);
+    color: white;
+    font-size: 30px;
+    text-decoration: underline;
+    margin-left: 20px; 
+    order: 1;
+}
+
+.left_arrow i {
+    position: relative;
+    top: -20px;
+}
+
+.arrows {
+    margin-top: 5px;
+    margin-left: 15px;
+}
+
+.container_svintus {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1405px;
+}
+
+.up_arrowmenu {
+    position: relative;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table td {
+    border-right: 2px solid rgb(139, 139, 255);
+    padding: 20px;
+}
+
+table td:last-child {
+    border-right: none; 
+}
+
+.tab {
+    background-color: white;
+    padding: 20px;
+    width: 1405px; 
+    margin: 0 auto;
+    position: relative; 
+    border-radius: 5px;
+}
+
+.bi-arrow-up-circle-fill {
+    font-size: 35px;
+    display: block;
+    margin: 0 auto; 
+    position: absolute;
+    top: -60px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+}
+
