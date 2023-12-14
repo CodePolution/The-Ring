@@ -10,21 +10,15 @@
 </head>
 <body>
     <header>
+        <form method='POST' action={% url "out" %}>
         <nav class="navbar" style="background-color: #000000;">
-            {% if user.is_authenticated %}
-            <form method='POST' action={% url "out" %}>
                 {% csrf_token %}    
                 <div class="container-fluid container_nav d-flex">
                     <a class="navbar-brand text-white">Название</a>
                     <button type='submit' class="custom_btn">Выйти</button>
                 </div>
-            </form>
-            {% else %}
-            <div>
-                <a class="navbar-brand text-white">Название</a>
-            </div>
-            {% endif %}  
-        </nav>  
+        </nav>
+        </form>  
     </header>
 
 
