@@ -10,22 +10,33 @@
 </head>
 <body>
     <header>
-        
-         <form style="background-color: #000000;" method='POST' action={% url "out" %}>   {% csrf_token %}
         <nav class="navbar" style="background-color: #000000;">
-            
-            <div class="container-fluid container_nav d-flex">
+            {% if user.is_authenticated %}
+            <form method='POST' action={% url "out" %}>
+                {% csrf_token %}    
+                <div class="container-fluid container_nav d-flex">
+                    <a class="navbar-brand text-white">Название</a>
+                    <button type='submit' class="custom_btn">Выйти</button>
+                </div>
+            </form>
+            {% else %}
+            <div>
                 <a class="navbar-brand text-white">Название</a>
-                <button type='submit' class="custom_btn" type="submit">Выйти</button>
             </div>
-            
-        </nav>
-        </form> 
+            {% endif %}  
+        </nav>  
     </header>
+
+
     <main>
+        <div class="container-fluid">
+
+        </div>
+        
         <div class="container-fluid">
             <div class="container d-flex justify-content-center pt-4">
                 <div class="row">
+                    
                     <div class="col-12 d-flex offset-2">
                         <h5 class="text-white" style="margin-right: 10px;">Servers:</h5>
                         <div class="first d-flex px-2">

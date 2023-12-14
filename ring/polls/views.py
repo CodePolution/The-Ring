@@ -10,10 +10,16 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.views import  LoginView, LogoutView
 from .forms import AuthorizationForm
-from django.contrib.auth import logout
+from django.contrib.auth import *
 
+
+# Отображение основной страницы со встроенной аутентификацией
 def main(request):
-    return render(request, 'polls/main.html')
+    if request.user.is_authenticated:
+        return render(request, 'polls/main.html')
+    else:
+        return render(request, 'polls/authorization.html')
+
 
 class SignInView(LoginView):
     """

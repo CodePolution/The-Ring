@@ -10,5 +10,5 @@ from . import views
 urlpatterns = [
     path('', views.main, name='main'),
     path('login/', views.SignInView.as_view(), name="log"),
-    path('logout/', views.LogoutView.as_view(template_name='polls/authorization.html'), name='out'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='polls/authorization.html'), name='out'),
 ]
