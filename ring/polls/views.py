@@ -13,7 +13,7 @@ from django.contrib.auth.views import  LoginView, LogoutView
 from .models import ChainStatus
 from .forms import AuthorizationForm
 from django.contrib.auth import *
-
+from .views import LogoutView
 
 # Отображение основной страницы со встроенной аутентификацией
 def main(request):
@@ -51,8 +51,14 @@ class SignInView(LoginView):
     
     def get_success_url(self) -> str:
         return self.success_url
- 
- 
+
+# Обновленный логаут 
+class Logoutt():
+    def TR(self, request):
+        if request.user.is_authenticated:
+            LogoutView()
+            
+    
  
 # class LogOutView(LogoutView):
 #     template_name = 'polls/authorization.html'
