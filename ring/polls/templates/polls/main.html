@@ -37,25 +37,40 @@
                             <!-- кружки -->
                             {% if chain1.status %}
                             <div class="green-circle"></div>
-                            <!-- стрелки -->
                             {% else %}
                             <div class="red-circle"></div>
                             {% endif %}
-                            <svg class="arrows" xmlns="http://www.w3.org/2000/svg" width="81" height="16" viewBox="0 0 81 16" fill="none">
-                                <path d="M80.7071 8.70711C81.0976 8.31658 81.0976 7.68342 80.7071 7.29289L74.3431 0.928932C73.9526 0.538408 73.3195 0.538408 72.9289 0.928932C72.5384 1.31946 72.5384 1.95262 72.9289 2.34315L78.5858 8L72.9289 13.6569C72.5384 14.0474 72.5384 14.6805 72.9289 15.0711C73.3195 15.4616 73.9526 15.4616 74.3431 15.0711L80.7071 8.70711ZM0 9H80V7H0V9Z" fill="white"/>
-                            </svg>
-                        </div>
-                        <div class="second d-flex  px-2">
-                            <!-- кружки -->
-                            <div class="red-circle"></div>
+
                             <!-- стрелки -->
                             <svg class="arrows" xmlns="http://www.w3.org/2000/svg" width="81" height="16" viewBox="0 0 81 16" fill="none">
                                 <path d="M80.7071 8.70711C81.0976 8.31658 81.0976 7.68342 80.7071 7.29289L74.3431 0.928932C73.9526 0.538408 73.3195 0.538408 72.9289 0.928932C72.5384 1.31946 72.5384 1.95262 72.9289 2.34315L78.5858 8L72.9289 13.6569C72.5384 14.0474 72.5384 14.6805 72.9289 15.0711C73.3195 15.4616 73.9526 15.4616 74.3431 15.0711L80.7071 8.70711ZM0 9H80V7H0V9Z" fill="white"/>
                             </svg>
                         </div>
+
+                        {% comment %} chain2 {% endcomment %}
+                        <div class="second d-flex  px-2">
+                            <!-- кружки -->
+                            {% if chain2.status %}
+                            <div class="green-circle"></div>
+                            {% else %}
+                            <div class="red-circle"></div>
+                            {% endif %}
+
+                            <!-- стрелки -->
+                            <svg class="arrows" xmlns="http://www.w3.org/2000/svg" width="81" height="16" viewBox="0 0 81 16" fill="none">
+                                <path d="M80.7071 8.70711C81.0976 8.31658 81.0976 7.68342 80.7071 7.29289L74.3431 0.928932C73.9526 0.538408 73.3195 0.538408 72.9289 0.928932C72.5384 1.31946 72.5384 1.95262 72.9289 2.34315L78.5858 8L72.9289 13.6569C72.5384 14.0474 72.5384 14.6805 72.9289 15.0711C73.3195 15.4616 73.9526 15.4616 74.3431 15.0711L80.7071 8.70711ZM0 9H80V7H0V9Z" fill="white"/>
+                            </svg>
+                        </div>
+
+                        {% comment %} chain3 {% endcomment %}
                         <div class="third d-flex px-2">
                             <!-- кружки -->
+                            {% if chain3.status %}
+                            <div class="green-circle"></div>
+                            {% else %}
                             <div class="red-circle"></div>
+                            {% endif %}
+
                             <!-- стрелки -->
                             <svg class="arrows" xmlns="http://www.w3.org/2000/svg" width="81" height="20" viewBox="0 0 81 20" fill="none">
                                 <path d="M80.7071 10.7071C81.0976 10.3166 81.0976 9.68342 80.7071 9.29289L74.3431 2.92893C73.9526 2.53841 73.3195 2.53841 72.9289 2.92893C72.5384 3.31946 72.5384 3.95262 72.9289 4.34315L78.5858 10L72.9289 15.6569C72.5384 16.0474 72.5384 16.6805 72.9289 17.0711C73.3195 17.4616 73.9526 17.4616 74.3431 17.0711L80.7071 10.7071ZM0 11H80V9H0V11Z" fill="#727272"/>
@@ -63,17 +78,30 @@
                                 <line x1="31.7071" y1="1.29289" x2="49.3848" y2="18.9706" stroke="#727272" stroke-width="2"/>
                             </svg>
                         </div>
+
+                        {% comment %} chain4 {% endcomment %}
                         <div class="third d-flex px-2">
                             <!-- кружки -->
+                            {% if chain4.status %}
+                            <div class="green-circle"></div>
+                            {% else %}
                             <div class="red-circle"></div>
+                            {% endif %}
+
                             <!-- стрелки -->
                             <svg class="arrows" xmlns="http://www.w3.org/2000/svg" width="81" height="16" viewBox="0 0 81 16" fill="none">
                                 <path d="M80.7071 8.70711C81.0976 8.31658 81.0976 7.68342 80.7071 7.29289L74.3431 0.928932C73.9526 0.538408 73.3195 0.538408 72.9289 0.928932C72.5384 1.31946 72.5384 1.95262 72.9289 2.34315L78.5858 8L72.9289 13.6569C72.5384 14.0474 72.5384 14.6805 72.9289 15.0711C73.3195 15.4616 73.9526 15.4616 74.3431 15.0711L80.7071 8.70711ZM0 9H80V7H0V9Z" fill="white"/>
                             </svg>
                         </div>
+
+                        {% comment %} chain5 {% endcomment %}
                         <div class="fifth px-2">
                             <!-- кружки -->
+                            {% if chain5.status %}
+                            <div class="green-circle"></div>
+                            {% else %}
                             <div class="red-circle"></div>
+                            {% endif %}
                         </div>
                     </div>
                     

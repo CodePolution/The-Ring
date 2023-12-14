@@ -17,10 +17,16 @@ from django.contrib.auth import *
 
 # Отображение основной страницы со встроенной аутентификацией
 def main(request):
+    # Контекст для индикаторов
     context = {
-        'chain1': ChainStatus.objects.get(title='chain1') 
+        'chain1': ChainStatus.objects.get(title='chain1'),
+        'chain2': ChainStatus.objects.get(title='chain2'),
+        'chain3': ChainStatus.objects.get(title='chain3'),
+        'chain4': ChainStatus.objects.get(title='chain4'),
+        'chain5': ChainStatus.objects.get(title='chain5'),
     }
-    
+
+    # Проверка авторизации
     if request.user.is_authenticated:
         return render(request, 'polls/main.html', context)
     else:
