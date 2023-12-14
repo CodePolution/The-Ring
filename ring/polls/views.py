@@ -18,7 +18,7 @@ def main(request):
     if request.user.is_authenticated:
         return render(request, 'polls/main.html')
     else:
-        return render(request, 'polls/authorization.html')
+        return redirect('log')
 
 
 class SignInView(LoginView):
