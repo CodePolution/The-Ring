@@ -34,6 +34,13 @@ html, body, main {
     border-radius: 50%;
 }
 
+.green-circle {
+    width: 25px;
+    height: 25px;
+    background-color: green;
+    border-radius: 50%;
+}
+
 /* Стрелки */
 .bi {
     color: white;

@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import ChainStatus
 
-# Register your models here.
+@admin.register(ChainStatus)
+class LikesAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'status']

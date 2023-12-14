@@ -9,14 +9,20 @@ from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.views import  LoginView, LogoutView
+
+from .models import ChainStatus
 from .forms import AuthorizationForm
 from django.contrib.auth import *
 
 
 # Отображение основной страницы со встроенной аутентификацией
 def main(request):
+    context = {
+        'chain1': ChainStatus.objects.get(title='chain1') 
+    }
+    
     if request.user.is_authenticated:
-        return render(request, 'polls/main.html')
+        return render(request, 'polls/main.html', context)
     else:
         return redirect('log')
 
