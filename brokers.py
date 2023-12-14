@@ -3,8 +3,9 @@ import logging
 import pika
 import asyncio
 from _thread import start_new_thread
-from typing import Callable, Iterable, Coroutine, Any
+from typing import Callable, Iterable, Coroutine, Any, Type
 from dataclasses import dataclass
+from pydantic import BaseModel
 
 
 @dataclass
@@ -59,10 +60,11 @@ class Queue:
 @dataclass
 class DecoratedFunction:
     queue: Queue
-    function: Coroutine
+    function: Callable
     message_filters: Iterable[Callable] = None
+    input_class: Type[BaseModel] = None
 
-    def validate_message(self, message: dict):
+    def validate_message(self, message: Type[BaseModel]):
         if not self.message_filters:
             return True
 
@@ -158,6 +160,7 @@ class Message:
     properties: pika.BasicProperties
     channel: pika.adapters.blocking_connection.BlockingChannel
     method: pika.spec.Basic.Deliver
+    input_class: Type[BaseModel] = None
 
     async def get_data(self):
         json_data = self.json_data()
@@ -171,11 +174,13 @@ class Message:
 
     def json_data(self):
         try:
-            if isinstance(self.payload, bytes):
-                self.payload = self.payload.decode()
+            if self.input_class:
+                return self.input_class.model_validate_json(
+                    json_data=self.payload
+                )
 
-            return json.loads(self.payload)
-        except json.JSONDecodeError:
+            return BaseModel.model_validate_json(self.payload)
+        except ValueError:
             return {}
 
     async def nack(self, requeue: bool = False):
@@ -263,7 +268,7 @@ class BrokerManager:
             return results[-1]
         return None
 
-    def consume(self, queue_name: str, filters: list[Callable] = None):
+    def consume(self, queue_name: str, input_class: Type[BaseModel] = None, filters: list[Callable] = None):
         def wrapper(func):
             if not asyncio.iscoroutinefunction(func):
                 raise TypeError(
@@ -280,7 +285,8 @@ class BrokerManager:
                 DecoratedFunction(
                     queue=queue,
                     function=func,
-                    message_filters=filters
+                    message_filters=filters,
+                    input_class=input_class
                 )
             )
 
@@ -325,7 +331,8 @@ class BrokerManager:
                 properties=properties,
                 channel=channel,
                 method=method,
-                decorated_function=decorated_function
+                decorated_function=decorated_function,
+                input_class=decorated_function.input_class
             )
 
             if not message_instance._validate_message() or not message_instance.json_data():
@@ -336,7 +343,7 @@ class BrokerManager:
                 self.channel.basic_ack(delivery_tag=message_instance.delivery_tag, multiple=False)
 
             return asyncio.run_coroutine_threadsafe(
-                decorated_function.function(message_instance, exchange=exchange),
+                coro=decorated_function.function(message_instance, exchange=exchange),
                 loop=self.__loop
             )
 

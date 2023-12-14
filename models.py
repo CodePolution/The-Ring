@@ -2,6 +2,11 @@ from pydantic import BaseModel, field_validator
 
 
 class FieldSetupModel(BaseModel):
+    """
+    Подмодель сообщения для ностройки
+    обработки конкретного поля, полученного из ответа.
+    """
+
     name: str
     operation: str
 
@@ -27,21 +32,33 @@ class FieldSetupModel(BaseModel):
 
 
 class FieldModel(BaseModel):
-    name: str
-    value: str
+    """
+    Подмодель для выввода данных полей из сообщения
+    """
 
-    @field_validator('value')
-    def value_validation(cls, value):
-        assert value.is_digit(), 'Значение не является числом.'
-        return value
+    name: str
+    value: int
 
 
 class DataModel(BaseModel):
-    fields: list[FieldModel]
+    """
+    Стандартная модель ответа сервера через RabbitMQ.
+    """
+
+    fields: list[FieldModel] = None
+    setups: list[FieldSetupModel] = None
     message: str
 
     @field_validator('fields')
     def fields_validation(cls, value):
-        assert len(value) <= 4, 'Указано меньше полей, чем нужно.'
+        assert len(value) < cls.__param_count, \
+            'Указано меньше полей, чем нужно.'\
+            f'Укажите как минимум {cls.__param_count} полей.'
         return value
 
+    @field_validator('setups')
+    def setups_validation(cls, value):
+        assert len(value) < cls.__param_count, \
+            'Указано меньше настроек для полей, чем нужно.'\
+            f'Укажите как минимум {cls.__param_count} параметра(ов).'
+        return value

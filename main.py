@@ -1,3 +1,4 @@
+import models
 import settings
 from brokers import BrokerManager, Message, Queue, Exchange, Binding
 
@@ -81,10 +82,12 @@ manager.bindings = [
 ]
 
 
-@manager.consume(queue_name=settings.CHAIN_ROUTING_KEY)
+@manager.consume(queue_name=settings.CHAIN_ROUTING_KEY, input_class=models.DataModel)
 async def chain1_complete_callback(message: Message, exchange: Exchange, **_):
     data = await message.get_data()
     channel = message.channel
+
+    print(data)
 
     await message.nack(requeue=False)
 
