@@ -1,5 +1,5 @@
+import settings
 from brokers import BrokerManager, Message, Queue, Exchange, Binding
-
 
 manager = BrokerManager()
 
@@ -81,32 +81,16 @@ manager.bindings = [
 ]
 
 
-@manager.consume(queue_name='chain1')
+@manager.consume(queue_name=settings.CHAIN_ROUTING_KEY)
 async def chain1_complete_callback(message: Message, exchange: Exchange, **_):
     data = await message.get_data()
     channel = message.channel
 
-    print(data)
+    await message.nack(requeue=False)
 
     return await exchange.send_message(
         channel=channel,
-        routing_key='chain2',
-        message=data
-    )
-
-
-@manager.consume(queue_name='chain3')
-async def chain2_callback(message: Message, exchange: Exchange, **_):
-    data = await message.get_data()
-    channel = message.channel
-
-    print(data['user'])
-
-    await message.nack(requeue=False)
-
-    await exchange.send_message(
-        channel=channel,
-        routing_key='chain4',
+        routing_key=settings.NEXT_CHAIN_ROUTING_KEY,
         message=data
     )
 
