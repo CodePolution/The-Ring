@@ -26,8 +26,6 @@ services:
   django_service:
     container_name: django_service
     build: ./ring
-    volumes:
-      - ./ring:/usr/scr/code
     environment:
       - BROKER_URL=amqp://guest:guest@rabbitmq:5672
       - BROKER_EXCHANGE=chains
