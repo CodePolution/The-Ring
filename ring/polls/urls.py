@@ -1,10 +1,4 @@
 from django.urls import path
-from .views import (
-    main,
-    SignInView,
-    # LogOutView,
-    Logoutt
-)
 # from django.contrib.auth import views as auth_views
 from . import views
 
