@@ -10,5 +10,7 @@ COPY requirements.txt /usr/src/code
 
 RUN python -m pip install -r requirements.txt --timeout 500
 
+COPY . /usr/src/code
+
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /wait
 RUN chmod +x /wait
