@@ -1,5 +1,8 @@
 from django.contrib.auth.forms import AuthenticationForm
+from django import forms
 from django.contrib.auth import get_user_model
+
+from .models import Submit
 
 USER_MODEL = get_user_model()
 
@@ -20,4 +23,10 @@ class AuthorizationForm(AuthenticationForm):
 
     class Meta:
         model = USER_MODEL
-        fields = ['username', 'password'] 
+        fields = ['username', 'password']
+        
+class SubmitForm(forms.ModelForm):
+    
+    class Meta:
+        model = Submit
+        fields = ['one', 'two', 'three', 'four']

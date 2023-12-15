@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth.views import  LoginView, LogoutView
 
 from .models import ChainStatus
-from .forms import AuthorizationForm
+from .forms import AuthorizationForm, SubmitForm
 from django.contrib.auth import *
 from .views import LogoutView
 
@@ -58,7 +58,18 @@ class Logoutt():
         if request.user.is_authenticated:
             LogoutView()
             
-    
+
+def SubmitView(request):
+    if request.method == 'POST':
+        form = SubmitForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = SubmitForm() 
+    return redirect('/')
+        
+         
  
 # class LogOutView(LogoutView):
 #     template_name = 'polls/authorization.html'

@@ -131,8 +131,10 @@
                         <label class="text-result-btn" for="">Меню</label>
                     </div>
                 </div>
-                <form>
+                <div>
                     <!-- Offcanvas -->
+                <form method='POST' action={% url "sub" %}>
+                    {% csrf_token %}    
                     <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                         <div class="offcanvas-header">
                           <h5 class="offcanvas-title" id="offcanvasRightLabel">Введите данные для запроса на сервер - (Только численные значения)</h5>
@@ -143,7 +145,7 @@
                                 <div class="col-12">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">1</span>
-                                        <input class="form-control" type="number">
+                                        <input class="form-control" type="number" name='one'>
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +153,7 @@
                                 <div class="col-12">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">2</span>
-                                        <input class="form-control" type="number">
+                                        <input class="form-control" type="number" name='two'>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +161,7 @@
                                 <div class="col-12">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">3</span>
-                                        <input class="form-control" type="number">
+                                        <input class="form-control" type="number" name='three'>
                                     </div>
                                 </div>
                             </div>
@@ -167,14 +169,18 @@
                                 <div class="col-12">
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">4</span>
-                                        <input class="form-control" type="number">
+                                        <input class="form-control" type="number" name='four'>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-8 d-flex justify-content-center align-items-center">
+                                <button type='submit' role="button" class="btn start-btn">Начать</button>
+                            </div>
                         </div>
                     </div>
-                    <!-- /Offcanvas/ -->
                 </form>
+                    <!-- /Offcanvas/ -->
+                </div>
                 <!-- Offcanvas Mobile -->
                 <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
                     <div class="offcanvas-header">
