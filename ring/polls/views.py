@@ -28,7 +28,7 @@ def main(request):
 
     # Проверка авторизации
     if request.user.is_authenticated:
-        return render(request, 'polls/main.html', context)
+        return render(request, 'polls/index.html', context)
     else:
         return redirect('log')
 
