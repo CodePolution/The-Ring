@@ -487,10 +487,5 @@ class BrokerManager:
             )
 
         start_new_thread(self.__loop.run_forever, ())
-
-        while True:
-            try:
-                channel.start_consuming()
-            except Exception as e:
-                raise
+        channel.start_consuming()
 

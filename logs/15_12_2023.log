@@ -40,3 +40,13 @@
 2023-12-15 23:11:39,377 [MainThread  ] [INFO ]  [!] ==== Запуск "chain1" ====
 2023-12-15 23:11:39,377 [MainThread  ] [INFO ]  [!] Интерфейс FastAPi запущен!
 2023-12-15 23:11:39,392 [MainThread  ] [INFO ]  [!] Обработка сообщений брокера запущена!
+2023-12-15 23:29:48,886 [MainThread  ] [INFO ]  [!] ==== Запуск "chain1" ====
+2023-12-15 23:29:48,887 [MainThread  ] [INFO ]  [!] Интерфейс FastAPi запущен!
+2023-12-15 23:29:48,894 [MainThread  ] [INFO ]  [!] Обработка сообщений брокера запущена!
+2023-12-15 23:31:28,988 [MainThread  ] [INFO ]  Получено по ключу маршрутизации "chain1": {"already_modified_fields":[],"fields":[{"name":"namet","value":23}]}
+2023-12-15 23:31:28,989 [MainThread  ] [INFO ]  Отправлено на ключ маршрутизации "chain2": {"already_modified_fields":[[{"name":"namet","value":1058}]],"fields":[{"name":"namet","value":1058}]}
+2023-12-15 23:33:28,644 [MainThread  ] [INFO ]  [!] ==== Запуск "chain1" ====
+2023-12-15 23:33:28,644 [MainThread  ] [INFO ]  [!] Интерфейс FastAPi запущен!
+2023-12-15 23:33:28,653 [MainThread  ] [INFO ]  [!] Обработка сообщений брокера запущена!
+2023-12-15 23:33:32,496 [MainThread  ] [INFO ]  Получено по ключу маршрутизации "chain1": {"already_modified_fields":[],"fields":[{"name":"namet","value":23}]}
+2023-12-15 23:33:32,500 [MainThread  ] [INFO ]  Отправлено на ключ маршрутизации "chain2": {"already_modified_fields":[[{"name":"namet","value":1058}]],"fields":[{"name":"namet","value":1058}]}
