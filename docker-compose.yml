@@ -42,7 +42,7 @@ services:
       - DATABASE_PASSWORD=1234
       - DATABASE_SCHEME=db
     ports:
-      - 80:80
+      - "80:80"
     command: bash -c "/wait && python manage.py makemigrations && python manage.py migrate && gunicorn ring.wsgi:application --bind 0.0.0.0:80"
 
   chain1_service:
@@ -72,7 +72,7 @@ services:
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - 52:8080
+      - "52:8080"
     command: bash -c "/wait && python main.py"
 
   chain3_service:
@@ -102,7 +102,7 @@ services:
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - 54:8080
+      - "54:8080"
     command: bash -c "/wait && python main.py"
 
   chain5_service:
@@ -117,7 +117,7 @@ services:
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - 55:8080
+      - "55:8080"
     command: bash -c "/wait && python main.py"
 
 
