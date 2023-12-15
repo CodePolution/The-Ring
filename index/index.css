@@ -12,6 +12,7 @@ body{
     font-family: 'Roboto', sans-serif !important;
     font-size: 1em !important;
     background-color: var(--background-color) !important;
+    overflow-y: hidden;
 }
 
 /* Header */
@@ -71,8 +72,42 @@ body{
                 width: 60px;
                 height: 60px;
             }
+
+            .text-result-btn{
+                transform: rotate(-90deg);
+            }
+                /* Offcanvas */
+                .offcanvas{
+                    width: 100% !important;
+                    background-color: var(--background-color) !important;
+                    color: var(--text-color-light) !important;
+                    font-family: 'Roboto', sans-serif;
+                    font-size: 1em;
+                }
+
+                .offcanvas-title{
+                    font-size: 1.2em;
+                }
+
+                .offcanvas-body{
+                    margin-top: 10%;
+                }
+                /* /Offcanvas/ */
             /* /Middle part/ */
         /* Servers */
+        .left-col{
+            justify-content: end;
+        }
+        
+        .btn-server-status{
+            display: none;
+            font-size: 1em;
+            background-color: var(--advanced-color) !important;
+            color: var(--text-color-dark) !important;
+            width: 50px;
+            height: 50px;
+        }
+
         .server-status{
             width: 25px;
             height: 25px;
@@ -81,7 +116,114 @@ body{
         }
 
         .arrows{
-            width: 65px;
+            width: 60px;
         }
         /* /Servers/ */
     /* /Main/ */
+/* MEDIA */
+@media (min-width: 275px) { /* xxsm for small mobile */
+
+}
+
+@media (min-width: 350px) { /* xsm for mobile */
+
+}
+
+@media (min-width: 450px) { /* sm for mobile */
+    .left-col{
+        justify-content: start;
+    }
+
+    .server-status{
+        display: none;
+    }
+
+    .arrows{
+        display: none;
+    }
+
+    .left-col-lbl{
+        display: none;
+    }
+}
+
+@media (min-width: 768px) { /* md for planshet */
+    .left-col{
+        justify-content: end;
+    }
+
+    .server-status{
+        display: block;
+        width: 15px;
+        height: 15px;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .arrows{
+        display: block;
+        width: 35%;
+    }
+
+    .left-col-lbl{
+        display: block;
+    }
+
+    .btn-server-status{
+        display: none !important;
+    }
+}
+
+@media (min-width: 992px) { /* lg */
+    .left-col{
+        justify-content: end;
+    }
+
+    .server-status{
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .arrows{
+        display: block;
+        width: 40%;
+    }
+
+    .left-col-lbl{
+        display: block;
+    }
+
+    .btn-server-status{
+        display: none !important;
+    }
+}
+
+@media (min-width: 1400px) { /* xxl */
+    .left-col{
+        justify-content: end;
+    }
+
+    .server-status{
+        display: block;
+        width: 25px;
+        height: 25px;
+        background-color: red;
+        border-radius: 50%;
+    }
+
+    .arrows{
+        display: block;
+        width: 45%;
+    }
+
+    .left-col-lbl{
+        display: block;
+    }
+
+    .btn-server-status{
+        display: none !important;
+    }
+}
