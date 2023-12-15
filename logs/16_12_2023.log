@@ -1,0 +1,5 @@
+2023-12-16 00:34:21,464 [MainThread  ] [INFO ]  [!] ==== Запуск "chain1" ====
+2023-12-16 00:34:21,465 [MainThread  ] [INFO ]  [!] Интерфейс FastAPi запущен!
+2023-12-16 00:34:21,475 [MainThread  ] [INFO ]  [!] Обработка сообщений брокера запущена!
+2023-12-16 00:34:48,646 [MainThread  ] [INFO ]  Получено по ключу маршрутизации "chain1": {"already_modified_fields":[],"fields":[{"name":"namet","value":23}],"uuid":2002020202}
+2023-12-16 00:34:48,650 [MainThread  ] [INFO ]  Отправлено на ключ маршрутизации "chain2": {"already_modified_fields":[[{"name":"namet","value":1058}]],"fields":[{"name":"namet","value":1058}],"uuid":2002020202}

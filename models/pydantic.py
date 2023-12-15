@@ -3,15 +3,17 @@ from pydantic import BaseModel, field_validator, ConfigDict
 
 
 class PydanticModel(BaseModel):
-    pass
-
-
-class EmptyModel(PydanticModel):
     """
     Базовая модель для вывода любого без исключения json-сообщения
     """
 
     model_config = ConfigDict(extra='allow')
+
+
+class EmptyModel(PydanticModel):
+    """
+    Пустая модель для принятия любого json-сообщения
+    """
 
 
 class FieldSetupModel(PydanticModel):
@@ -21,7 +23,7 @@ class FieldSetupModel(PydanticModel):
     """
 
     name: str = pydantic.Field(description='Имя поля')
-    operation: str = pydantic.Field(description='Пайтон-операция')
+    operation: str = pydantic.Field(description='Python-операция')
 
     @field_validator('name')
     def name_validation(cls, value):
@@ -106,5 +108,3 @@ class DataModel(PydanticModel):
         self.already_modified_fields.append(self.fields)
 
         return self
-
-
