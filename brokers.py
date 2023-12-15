@@ -1,11 +1,20 @@
+import models
 import json
-import logging
 import pika
 import asyncio
+from logger import Logger
 from _thread import start_new_thread
-from typing import Callable, Iterable, Coroutine, Any, Type
+from typing import (
+    Callable,
+    Iterable,
+    Type,
+    Union,
+    Any
+)
 from dataclasses import dataclass
 from pydantic import BaseModel
+
+logger = Logger()
 
 
 @dataclass
@@ -62,9 +71,9 @@ class DecoratedFunction:
     queue: Queue
     function: Callable
     message_filters: Iterable[Callable] = None
-    input_class: Type[BaseModel] = None
+    input_class: Type[BaseModel] = models.EmptyModel
 
-    def validate_message(self, message: Type[BaseModel]):
+    def validate_message(self, message: BaseModel):
         if not self.message_filters:
             return True
 
@@ -81,7 +90,7 @@ class Exchange:
     exchange_type: str = 'direct'
     durable: bool = False
 
-    def validate(self, channel):
+    def validate(self, channel) -> bool:
         try:
             channel.exchange_declare(
                 exchange=self.name,
@@ -92,7 +101,7 @@ class Exchange:
         except:
             return False
 
-    def delete(self, channel):
+    def delete(self, channel) -> tuple[bool, Any]:
         if self.validate(channel):
             channel.exchange_delete(
                 exchange=self.name
@@ -101,7 +110,7 @@ class Exchange:
 
         return False, None
 
-    def bind(self, channel, queue, routing_key: str):
+    def bind(self, channel, queue, routing_key: str) -> tuple[Any, Queue, str]:
         if self.validate(channel):
             channel.queue_bind(
                 queue=queue.name,
@@ -114,7 +123,7 @@ class Exchange:
             'Обменник не найден!'
         )
 
-    def create(self, channel):
+    def create(self, channel) -> tuple[bool, Any]:
         channel.exchange_declare(
             exchange=self.name,
             exchange_type=self.exchange_type,
@@ -123,9 +132,18 @@ class Exchange:
         )
         return True, self
 
-    async def send_message(self, channel, routing_key: str, message: dict, properties: pika.BasicProperties = None):
+    async def send_message(self, channel, routing_key: str, message: Union[dict, Type[BaseModel]], properties: pika.BasicProperties = None) -> Any:
         try:
-            message_json = json.dumps(message)
+            if isinstance(message, BaseModel) or issubclass(message.__class__, BaseModel.__class__):
+                message_json = message.model_dump_json()
+
+            elif isinstance(message, dict):
+                message_json = json.dumps(message)
+
+            else:
+                raise ValueError(
+                    'Неподдерживаемый тип сообщения.'
+                )
         except json.JSONDecodeError:
             raise ValueError(
                 'Указанное сообщение не является JSON-сериализуемым объектом.'
@@ -160,13 +178,13 @@ class Message:
     properties: pika.BasicProperties
     channel: pika.adapters.blocking_connection.BlockingChannel
     method: pika.spec.Basic.Deliver
-    input_class: Type[BaseModel] = None
+    input_class: Type[BaseModel] = models.EmptyModel
 
     async def get_data(self):
         json_data = self.json_data()
 
         if not json_data:
-            logging.error('Получено сообщение некорректного формата (не JSON).')
+            logger.error(message='Получено сообщение некорректного формата (не JSON).')
             await self.nack(requeue=False)
             return None
 
@@ -191,7 +209,8 @@ class Message:
 
     async def ack(self):
         return self.channel.basic_ack(
-            delivery_tag=self.delivery_tag
+            delivery_tag=self.delivery_tag,
+            multiple=True
         )
 
     async def reject(self, requeue: bool = False):
@@ -329,10 +348,10 @@ class BrokerManager:
             message_instance = Message(
                 payload=body,
                 properties=properties,
-                channel=channel,
+                channel=self.channel,
                 method=method,
                 decorated_function=decorated_function,
-                input_class=decorated_function.input_class
+                input_class=decorated_function.input_class or models.EmptyModel
             )
 
             if not message_instance._validate_message() or not message_instance.json_data():
@@ -342,26 +361,39 @@ class BrokerManager:
             if decorated_function.queue.auto_ack:
                 self.channel.basic_ack(delivery_tag=message_instance.delivery_tag, multiple=False)
 
-            return asyncio.run_coroutine_threadsafe(
-                coro=decorated_function.function(message_instance, exchange=exchange),
-                loop=self.__loop
+            return asyncio.run(
+                decorated_function.function(message_instance, exchange=exchange)
             )
 
-    async def send_message(self, routing_key: str, message: str, properties: dict = None):
+    async def send_message(self, routing_key: str, message: Union[BaseModel, dict], properties: dict = None) -> Any:
         if properties:
             properties = pika.BasicProperties(**properties)
         else:
             properties = None
 
-        return self.channel.basic_publish(
+        if isinstance(message, BaseModel) or issubclass(message.__class__, BaseModel.__class__):
+            body_data = message.model_dump_json().encode()
+
+        elif isinstance(message, dict):
+            body_data = message.copy()
+
+        else:
+            message_type = type(message)
+            raise ValueError(
+                f'Тип данных {message_type} не поддерживается в качестве сообщения.'
+            )
+
+        channel = self.new_channel
+        return channel.basic_publish(
             exchange=self.default_exchange,
             routing_key=routing_key,
-            body=message.encode(),
+            body=body_data,
             properties=properties
         )
 
-    def create_connection(self, auth_url: str):
+    def create_connection(self, auth_url: str) -> pika.adapters.BlockingConnection:
         connection_params = pika.URLParameters(auth_url)
+        connection_params._heartbeat = 60
 
         connection = pika.BlockingConnection(
             connection_params
@@ -370,31 +402,6 @@ class BrokerManager:
         self.connection = connection
         return connection
 
-    def create_queue(self,
-                     queue_name: str,
-                     auto_ack: bool = False,
-                     durable: bool = False,
-                     binding: Binding = None,
-                     **arguments
-                     ):
-        channel = self.channel
-
-        channel.queue_declare(
-            queue=queue_name,
-            auto_delete=auto_ack,
-            durable=durable,
-            arguments=arguments
-        )
-
-        if binding:
-            channel.queue_bind(
-                queue=queue_name,
-                exchange=binding.exchange.name,
-                routing_key=binding.routing_key
-            )
-
-        return queue_name
-
     @property
     def channel(self) -> pika.adapters.blocking_connection.BlockingChannel:
         if not self.__channel:
@@ -402,6 +409,10 @@ class BrokerManager:
             self.__channel.flow(active=True)
 
         return self.__channel
+
+    @property
+    def new_channel(self) -> pika.adapters.blocking_connection.BlockingChannel:
+        return self.connection.channel()
 
     @property
     def connection(self) -> pika.adapters.BlockingConnection:
@@ -444,7 +455,7 @@ class BrokerManager:
         for binding in self.bindings:
             binding.make(channel=self.channel)
 
-        print('[!] Polling запущен!')
+        logger.info(msg='[!] Polling запущен!')
 
     @property
     def bindings(self):
@@ -461,16 +472,21 @@ class BrokerManager:
                 'Callback-функции не указаны.'
             )
 
-        self.__on_open_callback()
-
+        channel = self.channel
         for callback in self.__decorated_functions:
-            self.channel.basic_consume(
+            channel.basic_consume(
                 queue=callback.queue.name,
                 exclusive=callback.queue.exclusive,
                 auto_ack=False,
                 on_message_callback=self.__default_callback
             )
 
+        self.__on_open_callback()
         start_new_thread(self.__loop.run_forever, ())
-        self.channel.start_consuming()
+
+        while True:
+            try:
+                channel.start_consuming()
+            except Exception as e:
+                raise
 

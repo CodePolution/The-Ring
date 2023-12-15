@@ -3,6 +3,9 @@ import os
 # Директория проекта
 BASE_DIR = os.path.dirname(__file__)
 
+# Папка с шаблонами для FastAPI
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
 # Ключ маршрутизации для очереди RabbitMQ для данного chain
 CHAIN_ROUTING_KEY = os.getenv('CHAIN_ROUTING_KEY', 'chain1')
 

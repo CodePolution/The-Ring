@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="POST" action="{{ url_for('setup_post_endpoint') }}">
+        {% for field, type in fields.items() %}
+            <label for="id_{{field}}">{{ field }}</label>
+            <input id="id_{{field}}" type="text" name="{{ field }}">
+        {% endfor %}
+
+        <button type="submit">Добавить</button>
+    </form>
+</body>
+</html>
