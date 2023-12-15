@@ -69,7 +69,7 @@
                 <div>
                     <!-- Offcanvas -->
                 <form method='POST' action="{% url 'sub' %}">
-                    {% csrf_token %}    
+                    {% csrf_token %}
                     <div class="offcanvas offcanvas-end" data-bs-backdrop="static" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
                         <div class="offcanvas-header">
                           <h5 class="offcanvas-title" id="offcanvasRightLabel">Введите данные для запроса на сервер - (Только численные значения)</h5>
@@ -108,9 +108,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col d-flex justify-content-center align-items-center">
-                                <button type='submit' role="button" class="btn start-btn">Отправить</button>
-                            </div>
+                            {% if not task %}
+                                <div class="col d-flex justify-content-center align-items-center">
+                                    <button type='submit' role="button" class="btn start-btn">Отправить</button>
+                                </div>
+                            {% elif not task.is_done %}
+                                <p class="h5">Текущая операция еще обрабатывается. Обновите страницу для просмотра результатов.</p>
+                            {% else %}
+                                <div class="col-sm d-flex-justify-content-center">
+                                    <p class="h5">Результат вывода с чейнов:</p>
+                                </div>
+
+
+                                <ul class="list-group text-center">
+                                {% for field in task.response_fields %}
+                                    <li class="list-group-item">{{ field.value }}</li>
+                                {% endfor %}
+                                </ul>
+
+                                <div class="col d-flex justify-content-center align-items-center py-2">
+                                    <button type='submit' role="button" class="btn start-btn">Новая операция</button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </form>

@@ -32,6 +32,8 @@ class Task(models.Model):
         verbose_name='Тело ответа'
     )
 
+    C = type('C', (object,), {})
+
     @property
     def is_done(self):
         return bool(self.response_data)
@@ -49,3 +51,12 @@ class Task(models.Model):
             return json.loads(self.response_data)
 
         return None
+
+    @property
+    def response_fields(self):
+        if not self.is_done:
+            return {}
+
+        data = self.response_data_dump
+        return data['fields']
+

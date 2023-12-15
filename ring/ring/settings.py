@@ -133,3 +133,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 BROKER_URL = os.getenv('BROKER_URL', 'amqp://guest:guest@localhost:5672/')
+BROKER_EXCHANGE = os.getenv('BROKER_EXCHANGE', 'chains')
+BROKER_LAST_QUEUE = os.getenv('BROKER_LAST_QUEUE', 'django')
