@@ -1,36 +1,26 @@
-from telnetlib import LOGOUT
-from urllib import request
-from django import forms
-from django.conf import settings
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
+import pika
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.contrib.auth.views import  LoginView, LogoutView
-
+from django.views.generic import TemplateView, CreateView
+from django.contrib.auth.views import LoginView, LogoutView
 from .models import ChainStatus
 from .forms import AuthorizationForm, SubmitForm
-from django.contrib.auth import *
-from .views import LogoutView
 
-# Отображение основной страницы со встроенной аутентификацией
-def main(request):
-    # Контекст для индикаторов
-    context = {
-        'chain1': ChainStatus.objects.get(title='chain1'),
-        'chain2': ChainStatus.objects.get(title='chain2'),
-        'chain3': ChainStatus.objects.get(title='chain3'),
-        'chain4': ChainStatus.objects.get(title='chain4'),
-        'chain5': ChainStatus.objects.get(title='chain5'),
-    }
 
-    # Проверка авторизации
-    if request.user.is_authenticated:
-        return render(request, 'polls/index.html', context)
-    else:
+class IndexView(TemplateView):
+    template_name = None
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            self.template_name = 'polls/index.html'
+            return super().dispatch(request, *args, **kwargs)
+
         return redirect('log')
+
+    def get_context_data(self, **kwargs):
+        return {
+            'chains': ChainStatus.objects.all()
+        }
 
 
 class SignInView(LoginView):
@@ -52,25 +42,22 @@ class SignInView(LoginView):
     def get_success_url(self) -> str:
         return self.success_url
 
-# Обновленный логаут 
-class Logoutt():
-    def TR(self, request):
-        if request.user.is_authenticated:
-            LogoutView()
-            
 
-def SubmitView(request):
-    if request.method == 'POST':
-        form = SubmitForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = SubmitForm() 
-    return redirect('/')
-        
-         
- 
-# class LogOutView(LogoutView):
-#     template_name = 'polls/authorization.html'
-         
+class SubmitView(CreateView):
+    """
+    Класс view для создания запроса на обработку данных.
+    """
+
+    form_class = SubmitForm
+    context_object_name = 'object'
+    success_url = reverse_lazy('main')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('log')
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+
+        return super().form_valid(form)
