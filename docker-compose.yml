@@ -1,0 +1,123 @@
+services:
+  mysql_db:
+    image: mysql
+    container_name: mysql_db
+    volumes:
+      - mysql_volume:/var/lib/mysql/
+    restart: always
+    environment:
+      - MYSQL_DATABASE=db
+      - MYSQL_ROOT_PASSWORD=1234
+
+  rabbitmq_service:
+    image: rabbitmq:3.10.7-management
+    hostname: rabbitmq
+    restart: always
+    container_name: rabbitmq_service
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - rabbitmq_volume:/var/lib/rabbitmq
+    ports:
+      - "15672:15672"
+
+  django_service:
+    container_name: django_service
+    build: ./ring
+    volumes:
+      - ./ring:/usr/scr/code
+    environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq:5672
+      - BROKER_EXCHANGE=chains
+      - BROKER_LAST_QUEUE=django
+      - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=15
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+      - DATABASE_HOST=mysql_db
+      - DATABASE_PORT=3306
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=1234
+      - DATABASE_SCHEME=db
+    ports:
+      - 80:80
+    command: bash -c "/wait && python manage.py makemigrations && python manage.py migrate && gunicorn ring.wsgi:application --bind 0.0.0.0:80"
+
+  chain1_service:
+    image: chain_base
+    container_name: chain1
+    environment:
+      - CHAIN_ROUTING_KEY=chain1
+      - NEXT_CHAIN_ROUTING_KEY=chain2
+      - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=15
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+      - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
+    ports:
+      - 51:8080
+    command: bash -c "/wait && python main.py"
+
+  chain2_service:
+    image: chain_base
+    container_name: chain1
+    environment:
+      - CHAIN_ROUTING_KEY=chain2
+      - NEXT_CHAIN_ROUTING_KEY=chain3
+      - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=15
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+      - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
+    ports:
+      - 52:8080
+    command: bash -c "/wait && python main.py"
+
+  chain3_service:
+    image: chain_base
+    container_name: chain1
+    environment:
+      - CHAIN_ROUTING_KEY=chain3
+      - NEXT_CHAIN_ROUTING_KEY=chain4
+      - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=15
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+      - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
+    ports:
+      - 53:8080
+    command: bash -c "/wait && python main.py"
+
+  chain4_service:
+    image: chain_base
+    container_name: chain1
+    environment:
+      - CHAIN_ROUTING_KEY=chain4
+      - NEXT_CHAIN_ROUTING_KEY=chain5
+      - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=15
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+      - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
+    ports:
+      - 54:8080
+    command: bash -c "/wait && python main.py"
+
+  chain5_service:
+    image: chain_base
+    container_name: chain1
+    environment:
+      - CHAIN_ROUTING_KEY=chain5
+      - NEXT_CHAIN_ROUTING_KEY=django
+      - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=15
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+      - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
+    ports:
+      - 55:8080
+    command: bash -c "/wait && python main.py"
+
+
