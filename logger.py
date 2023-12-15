@@ -16,9 +16,6 @@ class Logger:
     LOG_EXTENSION = 'log'
     DATE_STRING = "%d_%m_%Y"
 
-    def __init__(self):
-        self.logger.info(msg='==== Старт логирования ====')
-
     @property
     def file_name(self):
         time = datetime.now()

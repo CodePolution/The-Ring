@@ -17,14 +17,14 @@
             </div>
 
             <div class="py-4 d-flex justify-content-center">
-                <h4>Настройка полей:</h4>
+                <h2>Настройка полей:</h2>
             </div>
             <div class="row">
                 <div class="col-sm d-flex justify-content-center">
                     <form method="POST" action="{{ url_for('setup_post_endpoint') }}">
-                        <div class="form-group row">
+                        <div class="form-group row my-3">
                             {% for field, type in fields.items() %}
-                                <label class="form-label" for="id_{{field}}">{{ field }}</label>
+                                <label class="form-label" for="id_{{field}}">{{ type.description }}</label>
                                 <input class="form-control" id="id_{{field}}" type="text" name="{{ field }}">
                             {% endfor %}
                         </div>
@@ -36,22 +36,30 @@
                 </div>
             </div>
 
-            <div class="row py-3">
-                <table class="table">
+            <hr>
+
+            <div class="row py-3 table-responsive">
+                <table class="table table-striped align-middle mb-0">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Имя поля</th>
                       <th scope="col">Операция</th>
+                      <th scope="col">Удаление</th>
                     </tr>
                   </thead>
                   <tbody>
                   {% for saved_field in saved_fields %}
-                    <tr>
-                      <th scope="row">{{ saved_field[0].id }}</th>
-                      <td>{{ saved_field[0].name }}</td>
-                      <td>{{ saved_field[0].operation }}</td>
-                    </tr>
+                      <tr>
+                            <th scope="row">{{ saved_field[0].id }}</th>
+                            <td>{{ saved_field[0].name }}</td>
+                            <td>{{ saved_field[0].operation }}</td>
+                            <td>
+                                <a class="btn btn-danger" href="{{ url_for('delete_field_setup', field_id=saved_field[0].id) }}">
+                                    Удалить
+                                </a>
+                            </td>
+                      </tr>
                   {% endfor %}
                   </tbody>
                 </table>

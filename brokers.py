@@ -1,4 +1,4 @@
-import models
+import models.pydantic
 import json
 import pika
 import asyncio
@@ -44,7 +44,7 @@ class Queue:
             if_unused=if_unused
         )
 
-    def create(self, channel, raise_exc: bool = False):
+    def create(self, channel):
         args = {}
 
         if self.message_ttl:
@@ -71,7 +71,7 @@ class DecoratedFunction:
     queue: Queue
     function: Callable
     message_filters: Iterable[Callable] = None
-    input_class: Type[BaseModel] = models.EmptyModel
+    input_class: Type[BaseModel] = models.pydantic.EmptyModel
 
     def validate_message(self, message: BaseModel):
         if not self.message_filters:
@@ -134,7 +134,7 @@ class Exchange:
 
     async def send_message(self, channel, routing_key: str, message: Union[dict, Type[BaseModel]], properties: pika.BasicProperties = None) -> Any:
         try:
-            if isinstance(message, BaseModel) or issubclass(message.__class__, BaseModel.__class__):
+            if isinstance(message, BaseModel) or issubclass(message.__class__, BaseModel):
                 message_json = message.model_dump_json()
 
             elif isinstance(message, dict):
@@ -178,7 +178,7 @@ class Message:
     properties: pika.BasicProperties
     channel: pika.adapters.blocking_connection.BlockingChannel
     method: pika.spec.Basic.Deliver
-    input_class: Type[BaseModel] = models.EmptyModel
+    input_class: Type[BaseModel] = models.pydantic.EmptyModel
 
     async def get_data(self):
         json_data = self.json_data()
@@ -351,7 +351,7 @@ class BrokerManager:
                 channel=self.channel,
                 method=method,
                 decorated_function=decorated_function,
-                input_class=decorated_function.input_class or models.EmptyModel
+                input_class=decorated_function.input_class or models.pydantic.EmptyModel
             )
 
             if not message_instance._validate_message() or not message_instance.json_data():
@@ -446,16 +446,18 @@ class BrokerManager:
         self.__exchanges = value
 
     def __on_open_callback(self, **_):
+        channel = self.channel
+
         for exchange in self.exchanges:
-            exchange.create(channel=self.channel)
+            exchange.create(channel=channel)
 
         for queue in self.queues:
-            queue.create(self.channel)
+            queue.create(channel=channel)
 
         for binding in self.bindings:
-            binding.make(channel=self.channel)
+            binding.make(channel=channel)
 
-        logger.info(msg='[!] Polling запущен!')
+        logger.info(msg='[!] Обработка сообщений брокера запущена!')
 
     @property
     def bindings(self):
@@ -473,6 +475,9 @@ class BrokerManager:
             )
 
         channel = self.channel
+
+        self.__on_open_callback()
+
         for callback in self.__decorated_functions:
             channel.basic_consume(
                 queue=callback.queue.name,
@@ -481,7 +486,6 @@ class BrokerManager:
                 on_message_callback=self.__default_callback
             )
 
-        self.__on_open_callback()
         start_new_thread(self.__loop.run_forever, ())
 
         while True:

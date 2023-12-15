@@ -99,6 +99,15 @@ async def setup_post_endpoint(request: Request, fields: models.fastapi.FieldSetu
     )
 
 
+@FASTAPI_APP.get('/setup/{field_id}/delete/')
+async def delete_field_setup(field_id: int):
+    database.FieldSetupModel.delete(database.FieldSetupModel.id == field_id)
+
+    return RedirectResponse(
+        FASTAPI_APP.url_path_for('setup_endpoint')
+    )
+
+
 @FASTAPI_APP.get('/setup/')
 async def setup_endpoint(request: Request):
     fields = models.pydantic.FieldSetupModel.model_fields

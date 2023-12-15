@@ -6,4 +6,3 @@ from fastapi import Form
 class FieldSetupModel:
     name: str = Form()
     operation: str = Form()
-

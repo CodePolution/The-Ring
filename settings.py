@@ -17,7 +17,7 @@ NEXT_CHAIN_ROUTING_KEY = os.getenv('NEXT_CHAIN_ROUTING_KEY', 'chain2')
 HOST = os.getenv('HOST', 'localhost')
 
 # Порт, на котором будет работать интерфейс FastAPI
-PORT = os.getenv('PORT', 80)
+PORT = os.getenv('PORT', 8080)
 
 # Хост, на котором запущена СУБД
 DATABASE_CONNECTION_URI = os.getenv('DATABASE_CONNECTION_URI', 'root:1234@localhost:3306')

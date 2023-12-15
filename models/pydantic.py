@@ -1,21 +1,12 @@
+import pydantic
 from pydantic import BaseModel, field_validator, ConfigDict
-from pydantic.fields import ModelPrivateAttr, Field
 
 
 class PydanticModel(BaseModel):
-    @classmethod
-    def get_field_names(cls, by_alias=False) -> list[str]:
-        field_names = []
-        for k, v in cls.__fields__.items():
-            if by_alias and isinstance(v, ModelPrivateAttr):
-                field_names.append(v.alias)
-            else:
-                field_names.append(k)
-
-        return field_names
+    pass
 
 
-class EmptyModel(BaseModel):
+class EmptyModel(PydanticModel):
     """
     Базовая модель для вывода любого без исключения json-сообщения
     """
@@ -23,14 +14,23 @@ class EmptyModel(BaseModel):
     model_config = ConfigDict(extra='allow')
 
 
-class FieldSetupModel(BaseModel):
+class FieldSetupModel(PydanticModel):
     """
     Подмодель сообщения для ностройки
     обработки конкретного поля, полученного из ответа.
     """
 
-    name: str
-    operation: str
+    name: str = pydantic.Field(description='Имя поля')
+    operation: str = pydantic.Field(description='Пайтон-операция')
+
+    @field_validator('name')
+    def name_validation(cls, value):
+        value = value.lower()
+        assert value.isidentifier(), \
+            'Название поля ввода должно сходиться с'\
+            'форматом имени переменных в Python.'
+
+        return value
 
     @field_validator('operation')
     def function_validation(cls, value):
@@ -57,7 +57,7 @@ class SetupModel(PydanticModel):
     Модель для настройки списка полей
     """
 
-    fields: list[FieldSetupModel]
+    fields: list[FieldSetupModel] = pydantic.Field(description='Поля настройки')
 
     @field_validator('fields')
     def fields_validation(cls, value):
@@ -65,34 +65,46 @@ class SetupModel(PydanticModel):
         return value
 
 
-class FieldModel(BaseModel):
+class FieldModel(PydanticModel):
     """
     Подмодель для вывода данных полей из сообщения
     """
 
-    name: str
-    value: int
+    name: str = pydantic.Field(description='Имя поля')
+    value: int = pydantic.Field(description='Значение поля')
+
+    @field_validator('name')
+    def name_validation(cls, value):
+        value = value.lower()
+        assert value.isidentifier(), \
+            'Название поля ввода должно сходиться с' \
+            'форматом имени переменных в Python.'
+
+        return value
 
 
-class DataModel(BaseModel):
+class DataModel(PydanticModel):
     """
     Стандартная модель ответа сервера через RabbitMQ.
     """
 
-    fields: list[FieldModel] = None
-    setups: list[FieldSetupModel] = None
-    message: str
+    already_modified_fields: list[list[FieldModel]] = pydantic.Field(description='Уже обработанные поля', default=[])
+    fields: list[FieldModel] = pydantic.Field(description='Поля ввода для обработки')
 
-    @field_validator('fields')
-    def fields_validation(cls, value):
-        assert len(value) < cls.__param_count, \
-            'Указано меньше полей, чем нужно.'\
-            f'Укажите как минимум {cls.__param_count} полей.'
-        return value
+    def operate_fields(self, setups: list):
+        setups_fields = {setup[0].name: setup[0].operation for setup in setups}
 
-    @field_validator('setups')
-    def setups_validation(cls, value):
-        assert len(value) < cls.__param_count, \
-            'Указано меньше настроек для полей, чем нужно.'\
-            f'Укажите как минимум {cls.__param_count} параметра(ов).'
-        return value
+        for field in self.fields:
+            if field.name in setups_fields:
+                x = field.value
+                operation = setups_fields[field.name].replace('x', str(x))
+                field.value = eval(operation)
+
+        if self.already_modified_fields is None:
+            self.already_modified_fields = []
+
+        self.already_modified_fields.append(self.fields)
+
+        return self
+
+
