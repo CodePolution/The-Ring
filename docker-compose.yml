@@ -57,12 +57,12 @@ services:
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - 51:8080
+      - "51:8080"
     command: bash -c "/wait && python main.py"
 
   chain2_service:
     image: chain_base
-    container_name: chain1
+    container_name: chain2
     environment:
       - CHAIN_ROUTING_KEY=chain2
       - NEXT_CHAIN_ROUTING_KEY=chain3
@@ -77,7 +77,7 @@ services:
 
   chain3_service:
     image: chain_base
-    container_name: chain1
+    container_name: chain3
     environment:
       - CHAIN_ROUTING_KEY=chain3
       - NEXT_CHAIN_ROUTING_KEY=chain4
@@ -87,12 +87,12 @@ services:
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - 53:8080
+      - "53:8080"
     command: bash -c "/wait && python main.py"
 
   chain4_service:
     image: chain_base
-    container_name: chain1
+    container_name: chain4
     environment:
       - CHAIN_ROUTING_KEY=chain4
       - NEXT_CHAIN_ROUTING_KEY=chain5
@@ -107,7 +107,7 @@ services:
 
   chain5_service:
     image: chain_base
-    container_name: chain1
+    container_name: chain5
     environment:
       - CHAIN_ROUTING_KEY=chain5
       - NEXT_CHAIN_ROUTING_KEY=django
@@ -119,5 +119,9 @@ services:
     ports:
       - "55:8080"
     command: bash -c "/wait && python main.py"
+
+volumes:
+  rabbitmq_volume:
+  mysql_volume:
 
 
