@@ -1,6 +1,7 @@
 import models.fastapi
 import models.pydantic
 import settings
+import database
 from fastapi import FastAPI, Request, Depends
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -87,8 +88,10 @@ async def log_file_download(request: Request, file_name: str):
 async def setup_post_endpoint(request: Request, fields: models.fastapi.FieldSetupModel = Depends()):
     try:
         data = models.pydantic.FieldSetupModel.model_validate(fields.__dict__)
+        database.FieldSetupModel.insert(**data.model_dump())
     except Exception as e:
-        return render_error(request, f'Данная форма введена некорректно.\n{e}')
+        error_message = f'Данная форма введена некорректно.\n{e}'
+        return render_error(request, error_message)
 
     return TEMPLATES.TemplateResponse(
         'setup_complete.html',
@@ -99,8 +102,9 @@ async def setup_post_endpoint(request: Request, fields: models.fastapi.FieldSetu
 @FASTAPI_APP.get('/setup/')
 async def setup_endpoint(request: Request):
     fields = models.pydantic.FieldSetupModel.model_fields
+    saved_fields = database.FieldSetupModel.select_all()
 
     return TEMPLATES.TemplateResponse(
         'setup.html',
-        {'request': request, 'fields': fields}
+        {'request': request, 'fields': fields, 'saved_fields': saved_fields}
     )

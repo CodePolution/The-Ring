@@ -2,9 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <title>Title</title>
 </head>
 <body>
-    <p>{{ fields }}</p>
+    <main class="main">
+        <div class="container">
+            <div class="position-relative">
+                <div class="col-sm-3 py-3">
+                    <a class="btn text-danger" href="{{ url_for('index') }}">
+                        < Назад
+                    </a>
+                </div>
+            </div>
+
+            <div class="py-4 d-flex justify-content-center">
+                <h2>Поле <code>{{ fields.name }}</code> успешно настроено.</h2>
+            </div>
+
+            <div class="py-2 d-flex justify-content-center">
+                <h4>Данные поля: <code>{{ fields }}</code></h4>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

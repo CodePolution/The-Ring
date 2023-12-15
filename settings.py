@@ -20,17 +20,12 @@ HOST = os.getenv('HOST', 'localhost')
 PORT = os.getenv('PORT', 80)
 
 # Хост, на котором запущена СУБД
-DATABASE_HOST = os.getenv('DATABASE_HOST', 'localhost')
-
-# Порт, на котором запущена СУБД
-DATABASE_PORT = os.getenv('DATABASE_PORT', '3306')
+DATABASE_CONNECTION_URI = os.getenv('DATABASE_CONNECTION_URI', 'root:1234@localhost:3306')
 
 # Драйвер СУБД для подключения через SqlAlchemy
 # Доступные драйвера: sqlite, mysql+pymysql, postgresql+psycopg2
 DATABASE_DRIVER = os.getenv('DATABASE_DRIVER', 'mysql+pymysql')
 
-# Пользователь СУБД, к которому нужно подключиться
-DATABASE_USER = os.getenv('DATABASE_USER', 'root')
 
-# Пароль от пользователя СУБД
-DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD', '1234')
+# Схема БД, на которой будут храниться данные данного chain
+DATABASE_SCHEME = os.getenv('DATABASE_SCHEME', CHAIN_ROUTING_KEY)

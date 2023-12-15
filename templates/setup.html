@@ -2,16 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <title>Настройка полей | {{ chain_name }}</title>
 </head>
 <body>
-    <form method="POST" action="{{ url_for('setup_post_endpoint') }}">
-        {% for field, type in fields.items() %}
-            <label for="id_{{field}}">{{ field }}</label>
-            <input id="id_{{field}}" type="text" name="{{ field }}">
-        {% endfor %}
+    <main class="main">
+        <div class="container">
+            <div class="position-relative">
+                <div class="col-sm-3 py-3">
+                    <a class="btn text-danger" href="{{ url_for('index') }}">
+                        < Назад
+                    </a>
+                </div>
+            </div>
 
-        <button type="submit">Добавить</button>
-    </form>
+            <div class="py-4 d-flex justify-content-center">
+                <h4>Настройка полей:</h4>
+            </div>
+            <div class="row">
+                <div class="col-sm d-flex justify-content-center">
+                    <form method="POST" action="{{ url_for('setup_post_endpoint') }}">
+                        <div class="form-group row">
+                            {% for field, type in fields.items() %}
+                                <label class="form-label" for="id_{{field}}">{{ field }}</label>
+                                <input class="form-control" id="id_{{field}}" type="text" name="{{ field }}">
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group d-flex justify-content-center">
+                            <button type="submit" class="btn btn-outline-success">Добавить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row py-3">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Имя поля</th>
+                      <th scope="col">Операция</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for saved_field in saved_fields %}
+                    <tr>
+                      <th scope="row">{{ saved_field[0].id }}</th>
+                      <td>{{ saved_field[0].name }}</td>
+                      <td>{{ saved_field[0].operation }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
