@@ -7,13 +7,14 @@ connection_url = f"{settings.DATABASE_DRIVER}://{settings.DATABASE_CONNECTION_UR
 
 engine = sqlalchemy.create_engine(connection_url)
 
+with engine.connect() as test_connection:
+    if not sqlalchemy.inspect(test_connection).has_schema(settings.DATABASE_SCHEME):
+        test_connection.execute(sqlalchemy.schema.CreateSchema(settings.DATABASE_SCHEME, if_not_exists=True))
+        test_connection.commit()
+
+
 session = session.Session(engine)
-
 connection = engine.connect()
-
-if settings.DATABASE_SCHEME not in connection.dialect.get_schema_names(connection):
-    connection.execute(sqlalchemy.schema.CreateSchema(settings.DATABASE_SCHEME))
-    connection.commit()
 
 
 class DBModel(DeclarativeBase):

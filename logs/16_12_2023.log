@@ -10,3 +10,6 @@
 2023-12-16 02:04:44,767 [MainThread  ] [INFO ]  Отправлено на ключ маршрутизации "chain2": {"already_modified_fields":[[{"name":"one","value":3},{"name":"two","value":125},{"name":"three","value":3},{"name":"four","value":4}]],"fields":[{"name":"one","value":3},{"name":"two","value":125},{"name":"three","value":3},{"name":"four","value":4}],"uuid":"54a7666e-d73b-4484-a0c5-1491cba225f9"}
 2023-12-16 02:05:31,835 [MainThread  ] [INFO ]  Получено по ключу маршрутизации "chain1": {"already_modified_fields":[],"fields":[{"name":"one","value":23},{"name":"two","value":23},{"name":"three","value":23},{"name":"four","value":2323}],"uuid":"1c72430b-43c9-4cb0-a6ea-2d1ee11fd1ae"}
 2023-12-16 02:05:31,837 [MainThread  ] [INFO ]  Отправлено на ключ маршрутизации "chain2": {"already_modified_fields":[[{"name":"one","value":25},{"name":"two","value":146},{"name":"three","value":23},{"name":"four","value":2323}]],"fields":[{"name":"one","value":25},{"name":"two","value":146},{"name":"three","value":23},{"name":"four","value":2323}],"uuid":"1c72430b-43c9-4cb0-a6ea-2d1ee11fd1ae"}
+2023-12-16 02:47:48,431 [MainThread  ] [INFO ]  [!] ==== Запуск "chain1" ====
+2023-12-16 02:47:48,431 [MainThread  ] [INFO ]  [!] Интерфейс FastAPi запущен!
+2023-12-16 02:47:48,444 [MainThread  ] [INFO ]  [!] Обработка сообщений брокера запущена!
