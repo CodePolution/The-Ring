@@ -148,6 +148,10 @@ body{
         display: none;
     }
 
+    .server-online{
+        display: none;
+    }
+
     .arrows{
         display: none;
     }
@@ -166,6 +170,10 @@ body{
         display: none;
     }
 
+    .server-online{
+        display: none;
+    }
+
     .arrows{
         display: none;
     }
@@ -181,6 +189,10 @@ body{
     }
 
     .server-status{
+        display: none;
+    }
+
+    .server-online{
         display: none;
     }
     
@@ -213,6 +225,14 @@ body{
         border-radius: 50%;
     }
 
+    .server-online{
+        display: block;
+        width: 15px;
+        height: 15px;
+        background-color: green;
+        border-radius: 50%;
+    }
+
     .arrows{
         display: block;
         width: 35%;
@@ -237,6 +257,13 @@ body{
         width: 20px;
         height: 20px;
         background-color: red;
+        border-radius: 50%;
+    }
+    .server-online{
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: green;
         border-radius: 50%;
     }
 
@@ -264,6 +291,14 @@ body{
         width: 25px;
         height: 25px;
         background-color: red;
+        border-radius: 50%;
+    }
+
+    .server-online{
+        display: block;
+        width: 25px;
+        height: 25px;
+        background-color: green;
         border-radius: 50%;
     }
 
