@@ -1,20 +1,18 @@
 import settings
 import sqlalchemy
 from sqlalchemy.orm import DeclarativeBase, session
+from sqlalchemy_utils import create_database, database_exists
 from typing import Callable
 
 connection_url = f"{settings.DATABASE_DRIVER}://{settings.DATABASE_CONNECTION_URI}/{settings.DATABASE_SCHEME}"
 
+if not database_exists(connection_url):
+    create_database(connection_url)
+
+
 engine = sqlalchemy.create_engine(connection_url)
-
-with engine.connect() as test_connection:
-    if not sqlalchemy.inspect(test_connection).has_schema(settings.DATABASE_SCHEME):
-        test_connection.execute(sqlalchemy.schema.CreateSchema(settings.DATABASE_SCHEME, if_not_exists=True))
-        test_connection.commit()
-
-
-session = session.Session(engine)
 connection = engine.connect()
+session = session.Session(connection)
 
 
 class DBModel(DeclarativeBase):
