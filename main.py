@@ -10,7 +10,7 @@ from _thread import start_new_thread
 manager = BrokerManager()
 logger = Logger()
 
-manager.create_connection('amqp://guest:guest@localhost:5672/')
+manager.create_connection(settings.BROKER_URL)
 
 manager.queues = [
     django := Queue(

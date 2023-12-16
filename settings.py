@@ -29,3 +29,7 @@ DATABASE_DRIVER = os.getenv('DATABASE_DRIVER', 'mysql+pymysql')
 
 # Схема БД, на которой будут храниться данные данного chain
 DATABASE_SCHEME = os.getenv('DATABASE_SCHEME', CHAIN_ROUTING_KEY)
+
+
+# Адрес на подключение к RabbitMQ
+BROKER_URL = os.getenv('BROKER_URL', 'amqp://guest:guest@localhost:5672')
