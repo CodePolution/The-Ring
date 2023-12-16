@@ -21,7 +21,7 @@ services:
     volumes:
       - rabbitmq_volume:/var/lib/rabbitmq
     ports:
-      - "15672:15672"
+      - "15673:15672"
 
   django_service:
     container_name: django_service
