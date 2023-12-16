@@ -57,10 +57,18 @@ class Consumer(Thread):
 
     def run(self):
         new_channel = connection.channel(channel_number=228)
+        new_channel.queue_declare(
+            queue='django',
+            auto_delete=False,
+            exclusive=False,
+            durable=False
+        )
+
         new_channel.basic_consume(
             queue=settings.BROKER_LAST_QUEUE,
             on_message_callback=self.process_message,
             auto_ack=True,
             exclusive=False
         )
-        return channel.start_consuming()
+
+        return new_channel.start_consuming()

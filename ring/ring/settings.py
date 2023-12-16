@@ -127,11 +127,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = 'staticfiles/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-BROKER_URL = os.getenv('BROKER_URL', 'amqp://guest:guest@localhost:5672/')
+BROKER_URL = os.getenv('BROKER_URL', 'amqp://guest:guest@localhost:5673/')
 BROKER_EXCHANGE = os.getenv('BROKER_EXCHANGE', 'chains')
 BROKER_LAST_QUEUE = os.getenv('BROKER_LAST_QUEUE', 'django')

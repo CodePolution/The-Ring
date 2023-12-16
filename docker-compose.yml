@@ -20,6 +20,7 @@ services:
       - rabbitmq_volume:/var/lib/rabbitmq
     ports:
       - "15673:15672"
+      - "5673:5672"
 
   django_service:
     container_name: django_service
@@ -39,7 +40,7 @@ services:
       - DATABASE_SCHEME=db
     ports:
       - "80:80"
-    command: bash -c "/wait && python manage.py makemigrations && python manage.py migrate && gunicorn ring.wsgi:application --bind 0.0.0.0:80"
+    command: bash -c "/wait && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 80"
 
   chain1_service:
     image: chain_base
