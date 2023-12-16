@@ -56,7 +56,8 @@ class Consumer(Thread):
         task_instance.save()
 
     def run(self):
-        channel.basic_consume(
+        new_channel = connection.channel(channel_number=228)
+        new_channel.basic_consume(
             queue=settings.BROKER_LAST_QUEUE,
             on_message_callback=self.process_message,
             auto_ack=True,

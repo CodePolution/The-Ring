@@ -11,7 +11,6 @@ services:
 
   rabbitmq_service:
     image: rabbitmq:3.12
-    hostname: rabbitmq
     restart: always
     container_name: rabbitmq_service
     environment:
@@ -26,7 +25,7 @@ services:
     container_name: django_service
     build: ./ring
     environment:
-      - BROKER_URL=amqp://guest:guest@rabbitmq:5672
+      - BROKER_URL=amqp://guest:guest@rabbitmq_service:5672
       - BROKER_EXCHANGE=chains
       - BROKER_LAST_QUEUE=django
       - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
@@ -46,75 +45,90 @@ services:
     image: chain_base
     container_name: chain1
     environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq_service:5672
       - CHAIN_ROUTING_KEY=chain1
       - NEXT_CHAIN_ROUTING_KEY=chain2
+      - HOST=0.0.0.0
+      - PORT=8081
       - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=15
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - "51:8080"
+      - "51:8081"
     command: bash -c "/wait && python main.py"
 
   chain2_service:
     image: chain_base
     container_name: chain2
     environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq_service:5672
       - CHAIN_ROUTING_KEY=chain2
       - NEXT_CHAIN_ROUTING_KEY=chain3
+      - HOST=0.0.0.0
+      - PORT=8082
       - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=15
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - "52:8080"
+      - "52:8082"
     command: bash -c "/wait && python main.py"
 
   chain3_service:
     image: chain_base
     container_name: chain3
     environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq_service:5672
       - CHAIN_ROUTING_KEY=chain3
       - NEXT_CHAIN_ROUTING_KEY=chain4
+      - HOST=0.0.0.0
+      - PORT=8083
       - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=15
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - "53:8080"
+      - "53:8083"
     command: bash -c "/wait && python main.py"
 
   chain4_service:
     image: chain_base
     container_name: chain4
     environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq_service:5672
       - CHAIN_ROUTING_KEY=chain4
       - NEXT_CHAIN_ROUTING_KEY=chain5
+      - HOST=0.0.0.0
+      - PORT=8084
       - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=15
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - "54:8080"
+      - "54:8084"
     command: bash -c "/wait && python main.py"
 
   chain5_service:
     image: chain_base
     container_name: chain5
     environment:
+      - BROKER_URL=amqp://guest:guest@rabbitmq_service:5672
       - CHAIN_ROUTING_KEY=chain5
       - NEXT_CHAIN_ROUTING_KEY=django
+      - HOST=0.0.0.0
+      - PORT=8085
       - WAIT_HOSTS=mysql_db:3306, rabbitmq_service:5672
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=15
       - WAIT_HOST_CONNECT_TIMEOUT=30
       - DATABASE_CONNECTION_URI=root:1234@mysql_db:3306
     ports:
-      - "55:8080"
+      - "55:8085"
     command: bash -c "/wait && python main.py"
 
 volumes:
