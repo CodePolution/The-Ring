@@ -474,12 +474,10 @@ class BrokerManager:
                 'Callback-функции не указаны.'
             )
 
-        channel = self.channel
-
         self.__on_open_callback()
 
         for callback in self.__decorated_functions:
-            channel.basic_consume(
+            self.channel.basic_consume(
                 queue=callback.queue.name,
                 exclusive=callback.queue.exclusive,
                 auto_ack=False,
@@ -487,5 +485,5 @@ class BrokerManager:
             )
 
         start_new_thread(self.__loop.run_forever, ())
-        channel.start_consuming()
+        self.channel.start_consuming()
 
